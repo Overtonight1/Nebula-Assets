@@ -278,28 +278,46 @@ if not requestsDisabled and not useStudio then
 end
 
 _G.ShowPrompt = (_G.ShowPrompt == nil) and true or _G.ShowPrompt
+local _alreadyExecuted = _G._NebulaExecuted
 
 if _G.ShowPrompt and prompt and type(prompt.create) == "function" then
     local finished = Instance.new("BindableEvent")
-    prompt.create(
-        "Welcome!",
-        [[
+    if _alreadyExecuted then
+        prompt.create(
+            "<font color='#FF3333'><b>WARNING</b></font>",
+            [[
+<font color='#FF4444'><b>You have already executed this script!</b></font>
+<font transparency='0.2'>Re-executing may cause unexpected behaviour or break things.</font>
+            ]],
+            "<font color='#FF3333'>Okay</font>",
+            "Close",
+            function()
+                finished:Fire()
+            end
+        )
+    else
+        prompt.create(
+            "Welcome!",
+            [[
 Welcome to Nebula Scripts <font color='#BF5FFF'><b>Premium!</b></font>
 <font transparency='0.3'>This is the best script!</font>
-        ]],
-        "Okay!",
-        "",
-        function()
-            local sound = Instance.new("Sound")
-            sound.SoundId = "rbxassetid://135244211779631"
-            sound.Parent = game:GetService("SoundService")
-            sound:Play()
-            game:GetService("Debris"):AddItem(sound, 10)
-            finished:Fire()
-        end
-    )
+            ]],
+            "Okay!",
+            "",
+            function()
+                local sound = Instance.new("Sound")
+                sound.SoundId = "rbxassetid://135244211779631"
+                sound.Parent = game:GetService("SoundService")
+                sound:Play()
+                game:GetService("Debris"):AddItem(sound, 10)
+                finished:Fire()
+            end
+        )
+    end
     finished.Event:Wait()
 end
+
+_G._NebulaExecuted = true
 
 if debugX then
 	warn('Moving on to continue initialisation')
