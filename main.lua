@@ -279,17 +279,52 @@ end
 
 _G.ShowPrompt = (_G.ShowPrompt == nil) and true or _G.ShowPrompt
 local _alreadyExecuted = _G._NebulaExecuted
+_G._NebulaExecuted = true
 
 if _G.ShowPrompt and prompt and type(prompt.create) == "function" then
     local finished = Instance.new("BindableEvent")
+
     if _alreadyExecuted then
+        task.spawn(function()
+            -- Watch for the prompt GUI to be parented, then restyle it before open() animates it
+            local gui = (gethui and gethui()) or game:GetService("CoreGui")
+            local promptGui = nil
+            local deadline = tick() + 3
+
+            local conn
+            conn = gui.ChildAdded:Connect(function(child)
+                if child:FindFirstChild("Policy") then
+                    promptGui = child
+                    conn:Disconnect()
+                end
+            end)
+
+            -- Also check existing children in case it's already there
+            for _, child in ipairs(gui:GetChildren()) do
+                if child:FindFirstChild("Policy") then
+                    promptGui = child
+                    conn:Disconnect()
+                    break
+                end
+            end
+
+            repeat task.wait() until promptGui or tick() > deadline
+            if conn then pcall(function() conn:Disconnect() end) end
+
+            if promptGui then
+                local policy = promptGui.Policy
+                -- Red title
+                policy.Title.TextColor3 = Color3.fromRGB(255, 60, 60)
+                -- Red primary (Okay) button
+                policy.Actions.Primary.BackgroundColor3 = Color3.fromRGB(160, 25, 25)
+                policy.Actions.Primary.Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+            end
+        end)
+
         prompt.create(
-            "<font color='#FF3333'><b>WARNING</b></font>",
-            [[
-<font color='#FF4444'><b>You have already executed this script!</b></font>
-<font transparency='0.2'>Re-executing may cause unexpected behaviour or break things.</font>
-            ]],
-            "<font color='#FF3333'>Okay</font>",
+            "WARNING",
+            "You have already executed this script! Re-executing may cause unexpected behaviour or break things.",
+            "Okay",
             "Close",
             function()
                 finished:Fire()
@@ -298,10 +333,7 @@ if _G.ShowPrompt and prompt and type(prompt.create) == "function" then
     else
         prompt.create(
             "Welcome!",
-            [[
-Welcome to Nebula Scripts <font color='#BF5FFF'><b>Premium!</b></font>
-<font transparency='0.3'>This is the best script!</font>
-            ]],
+            "Welcome to Nebula Scripts Premium!\nThis is the best script!",
             "Okay!",
             "",
             function()
@@ -314,10 +346,9 @@ Welcome to Nebula Scripts <font color='#BF5FFF'><b>Premium!</b></font>
             end
         )
     end
+
     finished.Event:Wait()
 end
-
-_G._NebulaExecuted = true
 
 if debugX then
 	warn('Moving on to continue initialisation')
