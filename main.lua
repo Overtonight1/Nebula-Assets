@@ -111,7 +111,7 @@ local settingsTable = {
 	General = {
 		rayfieldOpen = {Type = 'bind', Value = 'K', Name = 'Nebula Keybind'},
 		selectedTheme = {Type = 'dropdown', Value = 'Nebula', Name = 'Theme', Options = {"Default", "Nebula", "Ocean", "AmberGlow", "Light", "Amethyst", "Green", "Bloom", "DarkBlue", "Serenity", "Crimson", "Midnight", "Neon", "Sunset", "Arctic"}},
-		guiSize = {Type = 'slider', Value = 500, Name = 'GUI Size', Range = {300, 700}, Increment = 10},
+		-- guiSize = {Type = 'slider', Value = 500, Name = 'GUI Size', Range = {300, 700}, Increment = 10},
 	},
 	System = {
 		usageAnalytics = {Type = 'toggle', Value = true, Name = 'Anonymised Analytics'},
