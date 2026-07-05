@@ -2453,6 +2453,10 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Button.BackgroundTransparency = 1
 			Button.UIStroke.Transparency = 1
 			Button.Title.TextTransparency = 1
+			Button.ClipsDescendants = true
+			Button.Title.Size = UDim2.new(1, -42, 1, 0)
+			Button.Title.Position = UDim2.new(0, 12, 0, 0)
+			Button.Title.TextXAlignment = Enum.TextXAlignment.Left
 
 			TweenService:Create(Button, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
 			TweenService:Create(Button.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0}):Play()
@@ -2466,8 +2470,8 @@ function RayfieldLibrary:CreateWindow(Settings)
 
 			local indicator = Instance.new("ImageLabel")
 			indicator.Name = "ElementIndicator"
-			indicator.Size = UDim2.new(0, 16, 0, 16)
-			indicator.Position = UDim2.new(1, -24, 0.5, -8)
+			indicator.Size = UDim2.new(0, 14, 0, 14)
+			indicator.Position = UDim2.new(1, -12, 0.5, 0)
 			indicator.AnchorPoint = Vector2.new(1, 0.5)
 			indicator.BackgroundTransparency = 1
 			indicator.ImageTransparency = 1
