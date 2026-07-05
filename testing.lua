@@ -1,4 +1,4 @@
--- v1.07
+-- v1.08
 
 local debugX = true
 
@@ -3624,6 +3624,25 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Toggle.UIStroke.Transparency = 1
 			Toggle.Title.TextTransparency = 1
 			Toggle.Switch.BackgroundColor3 = SelectedTheme.ToggleBackground
+
+			local toggleSwitch = Toggle.Switch
+			local toggleIndicator = toggleSwitch.Indicator
+
+			if toggleSwitch:FindFirstChild("UICorner") then
+				toggleSwitch.UICorner.CornerRadius = UDim.new(0, 0)
+			end
+
+			if toggleIndicator:FindFirstChild("UICorner") then
+				toggleIndicator.UICorner.CornerRadius = UDim.new(0, 0)
+			end
+
+			if toggleSwitch:FindFirstChild("UIStroke") then
+				toggleSwitch.UIStroke.Thickness = 1.2
+			end
+
+			if toggleIndicator:FindFirstChild("UIStroke") then
+				toggleIndicator.UIStroke.Thickness = 1.2
+			end
 
 			if SelectedTheme ~= RayfieldLibrary.Theme.Default then
 				Toggle.Switch.Shadow.Visible = false
