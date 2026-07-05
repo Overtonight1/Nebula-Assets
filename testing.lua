@@ -1,4 +1,4 @@
-local debugX = true
+local debugX = false
 
 if debugX then
 	warn('Initialising Rayfield')
