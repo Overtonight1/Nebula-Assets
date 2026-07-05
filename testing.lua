@@ -1,4 +1,4 @@
--- v1.11
+-- v1.12
 
 local debugX = true
 
@@ -3853,10 +3853,10 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Slider.Main.Progress.BackgroundColor3 = SelectedTheme.SliderProgress
 
 			if Slider.Main:FindFirstChild("UICorner") then
-				Slider.Main.UICorner.CornerRadius = UDim.new(0, 6)
+				Slider.Main.UICorner.CornerRadius = UDim.new(0, 10)
 			end
 			if Slider.Main.Progress:FindFirstChild("UICorner") then
-				Slider.Main.Progress.UICorner.CornerRadius = UDim.new(0, 6)
+				Slider.Main.Progress.UICorner.CornerRadius = UDim.new(0, 10)
 			end
 			if Slider.Main:FindFirstChild("UIStroke") then
 				Slider.Main.UIStroke.Thickness = 1.2
@@ -3960,7 +3960,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 						elseif Current >= Location and (Location - Start) > 0 then
 							Start = Location
 						end
-						TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.45, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Size = UDim2.new(0, Current - Slider.Main.AbsolutePosition.X, 1, 0)}):Play()
+						TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, Current - Slider.Main.AbsolutePosition.X, 1, 0)}):Play()
 						local NewValue = SliderSettings.Range[1] + (Location - Slider.Main.AbsolutePosition.X) / Slider.Main.AbsoluteSize.X * (SliderSettings.Range[2] - SliderSettings.Range[1])
 
 						NewValue = math.floor(NewValue / SliderSettings.Increment + 0.5) * (SliderSettings.Increment * 10000000) / 10000000
@@ -3994,7 +3994,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 							end
 						end
 					else
-						TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Size = UDim2.new(0, Location - Slider.Main.AbsolutePosition.X > 5 and Location - Slider.Main.AbsolutePosition.X or 5, 1, 0)}):Play()
+						TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, Location - Slider.Main.AbsolutePosition.X > 5 and Location - Slider.Main.AbsolutePosition.X or 5, 1, 0)}):Play()
 						Loop:Disconnect()
 					end
 				end)
@@ -4003,7 +4003,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 			function SliderSettings:Set(NewVal)
 				local NewVal = math.clamp(NewVal, SliderSettings.Range[1], SliderSettings.Range[2])
 
-				TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.45, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Size = UDim2.new(0, Slider.Main.AbsoluteSize.X * ((NewVal - SliderSettings.Range[1]) / (SliderSettings.Range[2] - SliderSettings.Range[1])) > 5 and Slider.Main.AbsoluteSize.X * ((NewVal - SliderSettings.Range[1]) / (SliderSettings.Range[2] - SliderSettings.Range[1])) or 5, 1, 0)}):Play()
+				TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, Slider.Main.AbsoluteSize.X * ((NewVal - SliderSettings.Range[1]) / (SliderSettings.Range[2] - SliderSettings.Range[1])) > 5 and Slider.Main.AbsoluteSize.X * ((NewVal - SliderSettings.Range[1]) / (SliderSettings.Range[2] - SliderSettings.Range[1])) or 5, 1, 0)}):Play()
 				Slider.Main.Information.Text = tostring(NewVal) .. " " .. (SliderSettings.Suffix or "")
 
 				local Success, Response = pcall(function()
