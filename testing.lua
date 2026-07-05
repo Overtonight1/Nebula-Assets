@@ -1,4 +1,4 @@
--- v1.04
+-- v1.05
 
 local debugX = true
 
@@ -2450,16 +2450,19 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Button.Name = ButtonSettings.Name
 			Button.Title.Text = ButtonSettings.Name
 			Button.Visible = true
-			Button.Size = UDim2.new(1, -10, 0, 42)
+			Button.Size = UDim2.new(1, -10, 0, 46)
 			Button.Parent = TabPage
 
 			Button.BackgroundTransparency = 1
 			Button.UIStroke.Transparency = 1
 			Button.Title.TextTransparency = 1
 			Button.ClipsDescendants = true
-			Button.Title.Size = UDim2.new(1, -42, 1, 0)
-			Button.Title.Position = UDim2.new(0, 12, 0, 0)
+			Button.Title.Size = UDim2.new(1, -58, 0, 22)
+			Button.Title.Position = UDim2.new(0, 12, 0.5, 0)
+			Button.Title.AnchorPoint = Vector2.new(0, 0.5)
 			Button.Title.TextXAlignment = Enum.TextXAlignment.Left
+			Button.Title.TextYAlignment = Enum.TextYAlignment.Center
+			Button.Title.TextWrapped = false
 
 			TweenService:Create(Button, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
 			TweenService:Create(Button.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0}):Play()
@@ -2473,8 +2476,8 @@ function RayfieldLibrary:CreateWindow(Settings)
 
 			local indicator = Instance.new("ImageLabel")
 			indicator.Name = "ElementIndicator"
-			indicator.Size = UDim2.new(0, 14, 0, 14)
-			indicator.Position = UDim2.new(1, -12, 0.5, 0)
+			indicator.Size = UDim2.new(0, 18, 0, 18)
+			indicator.Position = UDim2.new(1, -14, 0.5, 0)
 			indicator.AnchorPoint = Vector2.new(1, 0.5)
 			indicator.BackgroundTransparency = 1
 			indicator.ImageTransparency = 1
