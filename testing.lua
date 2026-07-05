@@ -1,4 +1,4 @@
--- v1.06
+-- v1.07
 
 local debugX = true
 
@@ -2450,7 +2450,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Button.Name = ButtonSettings.Name
 			Button.Title.Text = ButtonSettings.Name
 			Button.Visible = true
-			Button.Size = UDim2.new(1, -10, 0, 40)
+			Button.Size = UDim2.new(1, -10, 0, 35)
 			Button.Parent = TabPage
 
 			Button.BackgroundTransparency = 1
