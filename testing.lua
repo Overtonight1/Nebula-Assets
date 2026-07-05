@@ -1,4 +1,4 @@
--- v1.10
+-- v1.11
 
 local debugX = true
 
@@ -3885,12 +3885,14 @@ function RayfieldLibrary:CreateWindow(Settings)
 			if not Slider.Main.Progress:FindFirstChild("UIGradient") then
 				local sliderProgressGradient = Instance.new("UIGradient")
 				sliderProgressGradient.Color = ColorSequence.new({
-					ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 110, 255)),
-					ColorSequenceKeypoint.new(0.6, Color3.fromRGB(220, 170, 255)),
+					ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 92, 205)),
+					ColorSequenceKeypoint.new(0.35, Color3.fromRGB(130, 90, 255)),
+					ColorSequenceKeypoint.new(0.7, Color3.fromRGB(80, 200, 255)),
 					ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
 				})
 				sliderProgressGradient.Transparency = NumberSequence.new({
 					NumberSequenceKeypoint.new(0, 0),
+					NumberSequenceKeypoint.new(0.6, 0.02),
 					NumberSequenceKeypoint.new(1, 0.08)
 				})
 				sliderProgressGradient.Parent = Slider.Main.Progress
@@ -4056,9 +4058,15 @@ function RayfieldLibrary:CreateWindow(Settings)
 				end
 				if Slider.Main.Progress:FindFirstChild("UIGradient") then
 					Slider.Main.Progress.UIGradient.Color = ColorSequence.new({
-						ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 110, 255)),
-						ColorSequenceKeypoint.new(0.6, Color3.fromRGB(220, 170, 255)),
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 92, 205)),
+						ColorSequenceKeypoint.new(0.35, Color3.fromRGB(130, 90, 255)),
+						ColorSequenceKeypoint.new(0.7, Color3.fromRGB(80, 200, 255)),
 						ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+					})
+					Slider.Main.Progress.UIGradient.Transparency = NumberSequence.new({
+						NumberSequenceKeypoint.new(0, 0),
+						NumberSequenceKeypoint.new(0.6, 0.02),
+						NumberSequenceKeypoint.new(1, 0.08)
 					})
 				end
 			end)
