@@ -1,4 +1,4 @@
--- v1.09
+-- v1.10
 
 local debugX = true
 
@@ -3852,6 +3852,50 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Slider.Main.Progress.UIStroke.Color = SelectedTheme.SliderStroke
 			Slider.Main.Progress.BackgroundColor3 = SelectedTheme.SliderProgress
 
+			if Slider.Main:FindFirstChild("UICorner") then
+				Slider.Main.UICorner.CornerRadius = UDim.new(0, 6)
+			end
+			if Slider.Main.Progress:FindFirstChild("UICorner") then
+				Slider.Main.Progress.UICorner.CornerRadius = UDim.new(0, 6)
+			end
+			if Slider.Main:FindFirstChild("UIStroke") then
+				Slider.Main.UIStroke.Thickness = 1.2
+				Slider.Main.UIStroke.Transparency = 0.15
+			end
+			if Slider.Main.Progress:FindFirstChild("UIStroke") then
+				Slider.Main.Progress.UIStroke.Thickness = 1.2
+				Slider.Main.Progress.UIStroke.Transparency = 0.15
+			end
+
+			if not Slider.Main:FindFirstChild("UIGradient") then
+				local sliderBgGradient = Instance.new("UIGradient")
+				sliderBgGradient.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromRGB(70, 35, 150)),
+					ColorSequenceKeypoint.new(0.45, Color3.fromRGB(135, 95, 215)),
+					ColorSequenceKeypoint.new(1, Color3.fromRGB(245, 240, 255))
+				})
+				sliderBgGradient.Transparency = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 0.05),
+					NumberSequenceKeypoint.new(0.5, 0.2),
+					NumberSequenceKeypoint.new(1, 0.3)
+				})
+				sliderBgGradient.Parent = Slider.Main
+			end
+
+			if not Slider.Main.Progress:FindFirstChild("UIGradient") then
+				local sliderProgressGradient = Instance.new("UIGradient")
+				sliderProgressGradient.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 110, 255)),
+					ColorSequenceKeypoint.new(0.6, Color3.fromRGB(220, 170, 255)),
+					ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+				})
+				sliderProgressGradient.Transparency = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 0),
+					NumberSequenceKeypoint.new(1, 0.08)
+				})
+				sliderProgressGradient.Parent = Slider.Main.Progress
+			end
+
 			TweenService:Create(Slider, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
 			TweenService:Create(Slider.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0}):Play()
 			TweenService:Create(Slider.Title, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {TextTransparency = 0}):Play()	
@@ -3997,6 +4041,26 @@ function RayfieldLibrary:CreateWindow(Settings)
 				Slider.Main.UIStroke.Color = SelectedTheme.SliderStroke
 				Slider.Main.Progress.UIStroke.Color = SelectedTheme.SliderStroke
 				Slider.Main.Progress.BackgroundColor3 = SelectedTheme.SliderProgress
+
+				if Slider.Main:FindFirstChild("UIGradient") then
+					Slider.Main.UIGradient.Color = ColorSequence.new({
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(70, 35, 150)),
+						ColorSequenceKeypoint.new(0.45, Color3.fromRGB(135, 95, 215)),
+						ColorSequenceKeypoint.new(1, Color3.fromRGB(245, 240, 255))
+					})
+					Slider.Main.UIGradient.Transparency = NumberSequence.new({
+						NumberSequenceKeypoint.new(0, 0.05),
+						NumberSequenceKeypoint.new(0.5, 0.2),
+						NumberSequenceKeypoint.new(1, 0.3)
+					})
+				end
+				if Slider.Main.Progress:FindFirstChild("UIGradient") then
+					Slider.Main.Progress.UIGradient.Color = ColorSequence.new({
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 110, 255)),
+						ColorSequenceKeypoint.new(0.6, Color3.fromRGB(220, 170, 255)),
+						ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+					})
+				end
 			end)
 
 			return SliderSettings
