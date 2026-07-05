@@ -1,4 +1,6 @@
-local debugX = false
+-- v1.04
+
+local debugX = true
 
 if debugX then
 	warn('Initialising Rayfield')
@@ -2448,6 +2450,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Button.Name = ButtonSettings.Name
 			Button.Title.Text = ButtonSettings.Name
 			Button.Visible = true
+			Button.Size = UDim2.new(1, -10, 0, 42)
 			Button.Parent = TabPage
 
 			Button.BackgroundTransparency = 1
