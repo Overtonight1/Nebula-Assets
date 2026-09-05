@@ -1,3 +1,5 @@
+-- v1.07
+
 local debugX = true
 
 if debugX then
@@ -2448,16 +2450,62 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Button.Name = ButtonSettings.Name
 			Button.Title.Text = ButtonSettings.Name
 			Button.Visible = true
+			Button.Size = UDim2.new(1, -10, 0, 35)
 			Button.Parent = TabPage
 
 			Button.BackgroundTransparency = 1
 			Button.UIStroke.Transparency = 1
 			Button.Title.TextTransparency = 1
+			Button.ClipsDescendants = true
+			Button.Title.Size = UDim2.new(1, -58, 0, 22)
+			Button.Title.Position = UDim2.new(0, 12, 0.5, 0)
+			Button.Title.AnchorPoint = Vector2.new(0, 0.5)
+			Button.Title.TextXAlignment = Enum.TextXAlignment.Left
+			Button.Title.TextYAlignment = Enum.TextYAlignment.Center
+			Button.Title.TextWrapped = false
 
 			TweenService:Create(Button, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
 			TweenService:Create(Button.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0}):Play()
 			TweenService:Create(Button.Title, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {TextTransparency = 0}):Play()	
 
+
+			local existingIndicator = Button:FindFirstChild("ElementIndicator")
+			if existingIndicator then
+				existingIndicator:Destroy()
+			end
+
+			local indicator = Instance.new("ImageLabel")
+			indicator.Name = "ElementIndicator"
+			indicator.Size = UDim2.new(0, 18, 0, 18)
+			indicator.Position = UDim2.new(1, -14, 0.5, 0)
+			indicator.AnchorPoint = Vector2.new(1, 0.5)
+			indicator.BackgroundTransparency = 1
+			indicator.ImageTransparency = 1
+			indicator.Visible = false
+			indicator.ZIndex = 10
+			indicator.Parent = Button
+			indicator.ImageColor3 = SelectedTheme.TextColor
+
+			local ok, iconUrl, iconOffset, iconSize = pcall(function()
+				return resolveIcon("fingerprint-pattern")
+			end)
+			if not ok or not iconUrl or iconUrl == "" then
+				local fallbackOk, fallbackUrl, fallbackOffset, fallbackSize = pcall(function()
+					return resolveIcon("fingerprint")
+				end)
+				if fallbackOk and fallbackUrl and fallbackUrl ~= "" then
+					iconUrl, iconOffset, iconSize = fallbackUrl, fallbackOffset, fallbackSize
+				end
+			end
+			if iconUrl and iconUrl ~= "" then
+				indicator.Image = iconUrl
+				if iconOffset then
+					indicator.ImageRectOffset = iconOffset
+				end
+				if iconSize then
+					indicator.ImageRectSize = iconSize
+				end
+			end
 
 			Button.Interact.MouseButton1Click:Connect(function()
 				local Success, Response = pcall(ButtonSettings.Callback)
@@ -2467,7 +2515,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 				end
 				if not Success then
 					TweenService:Create(Button, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {BackgroundColor3 = Color3.fromRGB(85, 0, 0)}):Play()
-					TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {TextTransparency = 1}):Play()
+					TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {ImageTransparency = 1}):Play()
 					TweenService:Create(Button.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
 					Button.Title.Text = "Callback Error"
 					print("Rayfield | "..ButtonSettings.Name.." Callback Error " ..tostring(Response))
@@ -2475,34 +2523,34 @@ function RayfieldLibrary:CreateWindow(Settings)
 					task.wait(0.5)
 					Button.Title.Text = ButtonSettings.Name
 					TweenService:Create(Button, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {BackgroundColor3 = SelectedTheme.ElementBackground}):Play()
-					TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {TextTransparency = 0.9}):Play()
+					TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {ImageTransparency = 0.9}):Play()
 					TweenService:Create(Button.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {Transparency = 0}):Play()
 				else
 					if not ButtonSettings.Ext then
 						SaveConfiguration(ButtonSettings.Name..'\n')
 					end
 					TweenService:Create(Button, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {BackgroundColor3 = SelectedTheme.ElementBackgroundHover}):Play()
-					TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {TextTransparency = 1}):Play()
+					TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {ImageTransparency = 1}):Play()
 					TweenService:Create(Button.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
 					task.wait(0.2)
 					TweenService:Create(Button, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {BackgroundColor3 = SelectedTheme.ElementBackground}):Play()
-					TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {TextTransparency = 0.9}):Play()
+					TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {ImageTransparency = 0.9}):Play()
 					TweenService:Create(Button.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {Transparency = 0}):Play()
 				end
 			end)
 
 			Button.MouseEnter:Connect(function()
 				TweenService:Create(Button, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {BackgroundColor3 = SelectedTheme.ElementBackgroundHover}):Play()
-				TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {TextTransparency = 0.7}):Play()
+				TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {ImageTransparency = 0.1}):Play()
 			end)
 
 			Button.MouseLeave:Connect(function()
 				TweenService:Create(Button, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {BackgroundColor3 = SelectedTheme.ElementBackground}):Play()
-				TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {TextTransparency = 0.9}):Play()
+				TweenService:Create(Button.ElementIndicator, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {ImageTransparency = 0.3}):Play()
 			end)
 
-			Button.ElementIndicator.TextTransparency = 1
-			Button.ElementIndicator.Visible = false
+			Button.ElementIndicator.ImageTransparency = 0.2
+			Button.ElementIndicator.Visible = true
 
 			function ButtonValue:Set(NewButton)
 				Button.Title.Text = NewButton
@@ -3577,6 +3625,55 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Toggle.Title.TextTransparency = 1
 			Toggle.Switch.BackgroundColor3 = SelectedTheme.ToggleBackground
 
+			local toggleSwitch = Toggle.Switch
+			local toggleIndicator = toggleSwitch.Indicator
+
+			if toggleSwitch:FindFirstChild("UICorner") then
+				toggleSwitch.UICorner.CornerRadius = UDim.new(0, 5)
+			end
+
+			if toggleIndicator:FindFirstChild("UICorner") then
+				toggleIndicator.UICorner.CornerRadius = UDim.new(0, 5)
+			end
+
+			if toggleSwitch:FindFirstChild("UIStroke") then
+				toggleSwitch.UIStroke.Thickness = 1.2
+				toggleSwitch.UIStroke.Transparency = 0.15
+				toggleSwitch.UIStroke.Color = Color3.fromRGB(255, 255, 255)
+			end
+
+			if toggleIndicator:FindFirstChild("UIStroke") then
+				toggleIndicator.UIStroke.Thickness = 1.2
+				toggleIndicator.UIStroke.Transparency = 0.2
+				toggleIndicator.UIStroke.Color = Color3.fromRGB(255, 255, 255)
+			end
+
+			if not toggleSwitch:FindFirstChild("UIGradient") then
+				local switchGradient = Instance.new("UIGradient")
+				switchGradient.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+					ColorSequenceKeypoint.new(1, Color3.fromRGB(210, 210, 210))
+				})
+				switchGradient.Transparency = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 0.08),
+					NumberSequenceKeypoint.new(1, 0.22)
+				})
+				switchGradient.Parent = toggleSwitch
+			end
+
+			if not toggleIndicator:FindFirstChild("UIGradient") then
+				local indicatorGradient = Instance.new("UIGradient")
+				indicatorGradient.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+					ColorSequenceKeypoint.new(1, Color3.fromRGB(235, 235, 235))
+				})
+				indicatorGradient.Transparency = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 0),
+					NumberSequenceKeypoint.new(1, 0.12)
+				})
+				indicatorGradient.Parent = toggleIndicator
+			end
+
 			if SelectedTheme ~= RayfieldLibrary.Theme.Default then
 				Toggle.Switch.Shadow.Visible = false
 			end
@@ -3610,7 +3707,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 					ToggleSettings.CurrentValue = false
 					TweenService:Create(Toggle, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {BackgroundColor3 = SelectedTheme.ElementBackgroundHover}):Play()
 					TweenService:Create(Toggle.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(1, -40, 0.5, 0)}):Play()
+					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(1, -40, 0.5, 0), Size = UDim2.new(0, 14, 0, 14)}):Play()
 					TweenService:Create(Toggle.Switch.Indicator.UIStroke, TweenInfo.new(0.55, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Color = SelectedTheme.ToggleDisabledStroke}):Play()
 					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.8, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {BackgroundColor3 = SelectedTheme.ToggleDisabled}):Play()
 					TweenService:Create(Toggle.Switch.UIStroke, TweenInfo.new(0.55, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Color = SelectedTheme.ToggleDisabledOuterStroke}):Play()
@@ -3620,7 +3717,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 					ToggleSettings.CurrentValue = true
 					TweenService:Create(Toggle, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {BackgroundColor3 = SelectedTheme.ElementBackgroundHover}):Play()
 					TweenService:Create(Toggle.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(1, -20, 0.5, 0)}):Play()
+					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(1, -20, 0.5, 0), Size = UDim2.new(0, 17, 0, 17)}):Play()
 					TweenService:Create(Toggle.Switch.Indicator.UIStroke, TweenInfo.new(0.55, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Color = SelectedTheme.ToggleEnabledStroke}):Play()
 					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.8, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {BackgroundColor3 = SelectedTheme.ToggleEnabled}):Play()
 					TweenService:Create(Toggle.Switch.UIStroke, TweenInfo.new(0.55, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Color = SelectedTheme.ToggleEnabledOuterStroke}):Play()
@@ -3656,8 +3753,8 @@ function RayfieldLibrary:CreateWindow(Settings)
 					ToggleSettings.CurrentValue = true
 					TweenService:Create(Toggle, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {BackgroundColor3 = SelectedTheme.ElementBackgroundHover}):Play()
 					TweenService:Create(Toggle.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(1, -20, 0.5, 0)}):Play()
-					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0,12,0,12)}):Play()
+					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(1, -20, 0.5, 0), Size = UDim2.new(0, 17, 0, 17)}):Play()
+					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 17, 0, 17)}):Play()
 					TweenService:Create(Toggle.Switch.Indicator.UIStroke, TweenInfo.new(0.55, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Color = SelectedTheme.ToggleEnabledStroke}):Play()
 					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.8, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {BackgroundColor3 = SelectedTheme.ToggleEnabled}):Play()
 					TweenService:Create(Toggle.Switch.UIStroke, TweenInfo.new(0.55, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Color = SelectedTheme.ToggleEnabledOuterStroke}):Play()
@@ -3668,8 +3765,8 @@ function RayfieldLibrary:CreateWindow(Settings)
 					ToggleSettings.CurrentValue = false
 					TweenService:Create(Toggle, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {BackgroundColor3 = SelectedTheme.ElementBackgroundHover}):Play()
 					TweenService:Create(Toggle.UIStroke, TweenInfo.new(0.6, Enum.EasingStyle.Exponential), {Transparency = 1}):Play()
-					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(1, -40, 0.5, 0)}):Play()
-					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0,12,0,12)}):Play()
+					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(1, -40, 0.5, 0), Size = UDim2.new(0, 14, 0, 14)}):Play()
+					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 14, 0, 14)}):Play()
 					TweenService:Create(Toggle.Switch.Indicator.UIStroke, TweenInfo.new(0.55, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Color = SelectedTheme.ToggleDisabledStroke}):Play()
 					TweenService:Create(Toggle.Switch.Indicator, TweenInfo.new(0.8, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {BackgroundColor3 = SelectedTheme.ToggleDisabled}):Play()
 					TweenService:Create(Toggle.Switch.UIStroke, TweenInfo.new(0.55, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Color = SelectedTheme.ToggleDisabledOuterStroke}):Play()
@@ -3755,6 +3852,52 @@ function RayfieldLibrary:CreateWindow(Settings)
 			Slider.Main.Progress.UIStroke.Color = SelectedTheme.SliderStroke
 			Slider.Main.Progress.BackgroundColor3 = SelectedTheme.SliderProgress
 
+			if Slider.Main:FindFirstChild("UICorner") then
+				Slider.Main.UICorner.CornerRadius = UDim.new(0, 10)
+			end
+			if Slider.Main.Progress:FindFirstChild("UICorner") then
+				Slider.Main.Progress.UICorner.CornerRadius = UDim.new(0, 10)
+			end
+			if Slider.Main:FindFirstChild("UIStroke") then
+				Slider.Main.UIStroke.Thickness = 1.2
+				Slider.Main.UIStroke.Transparency = 0.15
+			end
+			if Slider.Main.Progress:FindFirstChild("UIStroke") then
+				Slider.Main.Progress.UIStroke.Thickness = 1.2
+				Slider.Main.Progress.UIStroke.Transparency = 0.15
+			end
+
+			if not Slider.Main:FindFirstChild("UIGradient") then
+				local sliderBgGradient = Instance.new("UIGradient")
+				sliderBgGradient.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromRGB(70, 35, 150)),
+					ColorSequenceKeypoint.new(0.45, Color3.fromRGB(135, 95, 215)),
+					ColorSequenceKeypoint.new(1, Color3.fromRGB(245, 240, 255))
+				})
+				sliderBgGradient.Transparency = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 0.05),
+					NumberSequenceKeypoint.new(0.5, 0.2),
+					NumberSequenceKeypoint.new(1, 0.3)
+				})
+				sliderBgGradient.Parent = Slider.Main
+			end
+
+			if not Slider.Main.Progress:FindFirstChild("UIGradient") then
+				local sliderProgressGradient = Instance.new("UIGradient")
+				sliderProgressGradient.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 92, 205)),
+					ColorSequenceKeypoint.new(0.35, Color3.fromRGB(130, 90, 255)),
+					ColorSequenceKeypoint.new(0.7, Color3.fromRGB(80, 200, 255)),
+					ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+				})
+				sliderProgressGradient.Transparency = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 0),
+					NumberSequenceKeypoint.new(0.6, 0.02),
+					NumberSequenceKeypoint.new(1, 0.08)
+				})
+				sliderProgressGradient.Parent = Slider.Main.Progress
+			end
+
 			TweenService:Create(Slider, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {BackgroundTransparency = 0}):Play()
 			TweenService:Create(Slider.UIStroke, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {Transparency = 0}):Play()
 			TweenService:Create(Slider.Title, TweenInfo.new(0.7, Enum.EasingStyle.Exponential), {TextTransparency = 0}):Play()	
@@ -3817,7 +3960,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 						elseif Current >= Location and (Location - Start) > 0 then
 							Start = Location
 						end
-						TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.45, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Size = UDim2.new(0, Current - Slider.Main.AbsolutePosition.X, 1, 0)}):Play()
+						TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, Current - Slider.Main.AbsolutePosition.X, 1, 0)}):Play()
 						local NewValue = SliderSettings.Range[1] + (Location - Slider.Main.AbsolutePosition.X) / Slider.Main.AbsoluteSize.X * (SliderSettings.Range[2] - SliderSettings.Range[1])
 
 						NewValue = math.floor(NewValue / SliderSettings.Increment + 0.5) * (SliderSettings.Increment * 10000000) / 10000000
@@ -3851,7 +3994,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 							end
 						end
 					else
-						TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Size = UDim2.new(0, Location - Slider.Main.AbsolutePosition.X > 5 and Location - Slider.Main.AbsolutePosition.X or 5, 1, 0)}):Play()
+						TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, Location - Slider.Main.AbsolutePosition.X > 5 and Location - Slider.Main.AbsolutePosition.X or 5, 1, 0)}):Play()
 						Loop:Disconnect()
 					end
 				end)
@@ -3860,7 +4003,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 			function SliderSettings:Set(NewVal)
 				local NewVal = math.clamp(NewVal, SliderSettings.Range[1], SliderSettings.Range[2])
 
-				TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.45, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Size = UDim2.new(0, Slider.Main.AbsoluteSize.X * ((NewVal - SliderSettings.Range[1]) / (SliderSettings.Range[2] - SliderSettings.Range[1])) > 5 and Slider.Main.AbsoluteSize.X * ((NewVal - SliderSettings.Range[1]) / (SliderSettings.Range[2] - SliderSettings.Range[1])) or 5, 1, 0)}):Play()
+				TweenService:Create(Slider.Main.Progress, TweenInfo.new(0.45, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, Slider.Main.AbsoluteSize.X * ((NewVal - SliderSettings.Range[1]) / (SliderSettings.Range[2] - SliderSettings.Range[1])) > 5 and Slider.Main.AbsoluteSize.X * ((NewVal - SliderSettings.Range[1]) / (SliderSettings.Range[2] - SliderSettings.Range[1])) or 5, 1, 0)}):Play()
 				Slider.Main.Information.Text = tostring(NewVal) .. " " .. (SliderSettings.Suffix or "")
 
 				local Success, Response = pcall(function()
@@ -3900,6 +4043,32 @@ function RayfieldLibrary:CreateWindow(Settings)
 				Slider.Main.UIStroke.Color = SelectedTheme.SliderStroke
 				Slider.Main.Progress.UIStroke.Color = SelectedTheme.SliderStroke
 				Slider.Main.Progress.BackgroundColor3 = SelectedTheme.SliderProgress
+
+				if Slider.Main:FindFirstChild("UIGradient") then
+					Slider.Main.UIGradient.Color = ColorSequence.new({
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(70, 35, 150)),
+						ColorSequenceKeypoint.new(0.45, Color3.fromRGB(135, 95, 215)),
+						ColorSequenceKeypoint.new(1, Color3.fromRGB(245, 240, 255))
+					})
+					Slider.Main.UIGradient.Transparency = NumberSequence.new({
+						NumberSequenceKeypoint.new(0, 0.05),
+						NumberSequenceKeypoint.new(0.5, 0.2),
+						NumberSequenceKeypoint.new(1, 0.3)
+					})
+				end
+				if Slider.Main.Progress:FindFirstChild("UIGradient") then
+					Slider.Main.Progress.UIGradient.Color = ColorSequence.new({
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 92, 205)),
+						ColorSequenceKeypoint.new(0.35, Color3.fromRGB(130, 90, 255)),
+						ColorSequenceKeypoint.new(0.7, Color3.fromRGB(80, 200, 255)),
+						ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+					})
+					Slider.Main.Progress.UIGradient.Transparency = NumberSequence.new({
+						NumberSequenceKeypoint.new(0, 0),
+						NumberSequenceKeypoint.new(0.6, 0.02),
+						NumberSequenceKeypoint.new(1, 0.08)
+					})
+				end
 			end)
 
 			return SliderSettings
